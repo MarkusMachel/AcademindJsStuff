@@ -44,6 +44,10 @@
     border-radius: 4px;
 }
 
+.options-hide {
+  display: none;
+}
+
 .same-as-selected {
     cursor: pointer;
     padding: 5px;

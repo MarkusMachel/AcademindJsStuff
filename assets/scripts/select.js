@@ -3,18 +3,31 @@ const selectTag = document.getElementsByTagName("select");
 const renderSelect = () => {
   createParentDiv();
   renderMenu();
-}
+};
+
+// const applyMultiSelect = (elmnt) => {
+//   elmnt = document.getElementById('modelYear');
+//   elmnt.
+
+// }
 
 const inputChangeHandler = (sourceMenu) => {
   return (event) => {
     const inputValue = event.target.value;
-    if (inputValue !== '') {
-      const childElmnts = sourceMenu.querySelectorAll('.options');
-      console.log("User typed:", inputValue);
+    const childElmnts = sourceMenu.querySelectorAll(".options");
 
-      console.log('childs in handler: ', childElmnts)
-      
-      // Perform actions with the input value and corresponding select element
+    if (inputValue.trim() !== "") {
+      childElmnts.forEach((f) => {
+        if (f.innerHTML.includes(inputValue)) {
+          f.classList.remove("options-hide");
+        } else {
+          f.classList.add("options-hide");
+        }
+      });
+    } else if (inputValue.trim() === "") {
+      childElmnts.forEach((f) => {
+        f.classList.remove("options-hide");
+      });
     }
   };
 };
@@ -38,7 +51,6 @@ const renderFilter = () => {
     const divElm = document.createElement("div");
     const inpElm = document.createElement("input");
     inpElm.type = "text";
-    const selectId = "select_" + i;
 
     divElm.appendChild(inpElm);
 
@@ -50,7 +62,7 @@ const renderFilter = () => {
 };
 
 const renderMenu = () => {
-  let parentDiv, i, j, l, ll, selElmnt, a, b, c;
+  let parentDiv, i, j, selElmnt, a, b, c;
 
   parentDiv = document.getElementsByClassName("custom-select");
 
@@ -79,7 +91,6 @@ const renderMenu = () => {
             h.innerHTML = this.innerHTML;
             y = this.parentNode.getElementsByClassName("same-as-selected");
             for (k = 0; k < y.length; k++) {
-              console.log(y[k]);
               y[k].classList.add("options");
               y[k].classList.remove("same-as-selected");
             }
@@ -98,8 +109,6 @@ const renderMenu = () => {
       this.nextSibling.classList.toggle("select-hide");
       this.classList.toggle("select-arrow-active");
     });
-
-    console.log('selected item after loop: ', selElmnt)
   }
   renderFilter();
 };
@@ -132,7 +141,6 @@ const closeAllSelect = (elmnt) => {
 document.addEventListener("click", closeAllSelect);
 
 const dummyData2 = [12, 219, 208, 7, 26];
-
 const dummyData = [2020, 2019, 2018, 2017, 2016];
 
 // Function to populate select element with dummy data
