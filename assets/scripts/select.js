@@ -5,11 +5,78 @@ const renderSelect = () => {
   renderMenu();
 };
 
-// const applyMultiSelect = (elmnt) => {
-//   elmnt = document.getElementById('modelYear');
-//   elmnt.
+function multiOptionClickHandler(e) {
+  
+  const selectTag =  this.parentNode.parentNode.getElementsByTagName('select');
 
-// }
+  this.childNodes[1].checked = !this.childNodes[1].checked;
+
+  const inputElmnts = this.parentNode.getElementsByTagName('input');
+  let checked = [];
+  let unChecked = [];
+
+  for (let i = 0; i < inputElmnts.length; i++) {
+    if (inputElmnts[i].type === 'checkbox')  {
+      if (inputElmnts[i].checked) {
+        checked.push(inputElmnts[i].value);
+      } else {
+        unChecked.push(inputElmnts[i].value);
+      }
+    }
+  }
+  let node = this.parentNode.parentNode.getElementsByClassName('select-selected')[0].innerHTML = checked;
+  console.log(checked, unChecked, node, selectTag)
+
+}
+
+function optionClickHandler(e) {
+  let y, i, k, s, h, sl, yl;
+  s = this.parentNode.parentNode.getElementsByTagName("select")[0];
+  h = this.parentNode.previousSibling;
+  for (i = 0; i < s.length; i++) {
+    if (s.options[i].innerHTML == this.innerHTML) {
+      s.selectedIndex = i;
+      h.innerHTML = this.innerHTML;
+      y = this.parentNode.getElementsByClassName("same-as-selected");
+      for (k = 0; k < y.length; k++) {
+        y[k].classList.add("options");
+        y[k].classList.remove("same-as-selected");
+      }
+      this.setAttribute("class", "same-as-selected");
+      break;
+    }
+  }
+  h.click();
+  console.log("this works");
+}
+
+const applyMultiSelect = (elmnt) => {
+  elmnt = document.getElementById("modelYear");
+  const dropdownElmnt =
+    elmnt.parentNode.getElementsByClassName("selected-items")[0].childNodes;
+
+  for (let i = 0; i < dropdownElmnt.length; i++) {
+    if (
+      dropdownElmnt[i].classList.contains("options") ||
+      dropdownElmnt[i].classList.contains("same-as-selected")
+    ) {
+      const checkBoxElmnt = document.createElement("input");
+      checkBoxElmnt.setAttribute("type", "checkbox");
+      checkBoxElmnt.setAttribute("value", dropdownElmnt[i].innerHTML);
+
+      dropdownElmnt[i].removeEventListener("click", optionClickHandler);
+      dropdownElmnt[i].addEventListener("click", multiOptionClickHandler);
+
+      if (dropdownElmnt[i].classList.contains('same-as-selected')) {
+        dropdownElmnt[i].classList.remove('same-as-selected');
+        dropdownElmnt[i].classList.add("options");
+      }
+
+      dropdownElmnt[i].classList.add("multi-container");
+      dropdownElmnt[i].appendChild(checkBoxElmnt);
+    }
+  }
+};
 
 const inputChangeHandler = (sourceMenu) => {
   return (event) => {
@@ -40,7 +107,6 @@ const createParentDiv = () => {
     divElement.appendChild(selectTag[i].cloneNode(true));
 
     selectTag[i].parentNode.replaceChild(divElement, selectTag[i]);
-    console.log(selectTag[i]);
   }
 };
 
@@ -77,29 +143,13 @@ const renderMenu = () => {
     b = document.createElement("div");
     b.setAttribute("class", "selected-items select-hide");
 
-    for (j = 1; j < selElmnt.length; j++) {
+    for (j = 0; j < selElmnt.length; j++) {
       c = document.createElement("div");
       c.innerHTML = selElmnt.options[j].innerHTML;
-      c.classList.add("options");
-      c.addEventListener("click", function (e) {
-        let y, i, k, s, h, sl, yl;
-        s = this.parentNode.parentNode.getElementsByTagName("select")[0];
-        h = this.parentNode.previousSibling;
-        for (i = 0; i < s.length; i++) {
-          if (s.options[i].innerHTML == this.innerHTML) {
-            s.selectedIndex = i;
-            h.innerHTML = this.innerHTML;
-            y = this.parentNode.getElementsByClassName("same-as-selected");
-            for (k = 0; k < y.length; k++) {
-              y[k].classList.add("options");
-              y[k].classList.remove("same-as-selected");
-            }
-            this.setAttribute("class", "same-as-selected");
-            break;
-          }
-        }
-        h.click();
-      });
+      c.innerHTML === a.innerHTML
+        ? c.classList.add("same-as-selected")
+        : c.classList.add("options");
+      c.addEventListener("click", optionClickHandler);
       b.appendChild(c);
     }
     parentDiv[i].appendChild(b);

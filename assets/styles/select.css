@@ -45,7 +45,7 @@
 }
 
 .options-hide {
-  display: none;
+  display: none !important;
 }
 
 .same-as-selected {
@@ -95,4 +95,10 @@
 /* Hide the items when the select box is closed: */
 .select-hide {
   display: none;
+}
+
+.multi-container {
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
 }
