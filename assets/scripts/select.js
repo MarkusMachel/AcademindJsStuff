@@ -5,13 +5,41 @@ const renderSelect = () => {
   renderMenu();
 };
 
+function checkClickHandler(e) {
+  const inputElmnts = this.parentNode.parentNode.parentNode.getElementsByClassName('multi-checkBox');
+
+  for (let i = 0; i < inputElmnts.length; i++) {
+    if (inputElmnts[i].type === 'checkbox')  {
+      inputElmnts[i].checked = true;
+    }
+  }
+
+  const displayItem = this.parentNode.parentNode.parentNode.parentNode.getElementsByClassName('select-selected')[0].childNodes[0];
+  displayItem.innerHTML = `${inputElmnts.length} / ${inputElmnts.length}`
+
+  console.log()
+}
+
+function uncheckClickHandler(e) {
+  const inputElmnts = this.parentNode.parentNode.parentNode.getElementsByClassName('multi-checkBox');
+
+  for (let i = 0; i < inputElmnts.length; i++) {
+    if (inputElmnts[i].type === 'checkbox')  {
+      inputElmnts[i].checked = false;
+    }
+  }
+
+  const displayItem = this.parentNode.parentNode.parentNode.parentNode.getElementsByClassName('select-selected')[0].childNodes[0];
+  displayItem.innerHTML = 'Select Options';
+}
+
 function multiOptionClickHandler(e) {
   this.childNodes[1].checked = !this.childNodes[1].checked;
   
   let checked = [];
   let unChecked = [];
 
-  const inputElmnts = this.parentNode.getElementsByTagName('input');
+  const inputElmnts = this.parentNode.getElementsByClassName('multi-checkBox');
   
   for (let i = 0; i < inputElmnts.length; i++) {
     if (inputElmnts[i].type === 'checkbox')  {
@@ -23,7 +51,15 @@ function multiOptionClickHandler(e) {
     }
   }
   
-  this.parentNode.parentNode.getElementsByClassName('select-selected')[0].childNodes[0].innerHTML = checked;
+  if (checked.length === inputElmnts.length) {
+    this.parentNode.parentNode.getElementsByClassName('select-selected')[0].childNodes[0].innerHTML = `${inputElmnts.length} / ${inputElmnts.length}`
+  } 
+  else if (unChecked.length === inputElmnts.length) {
+    this.parentNode.parentNode.getElementsByClassName('select-selected')[0].childNodes[0].innerHTML = 'Select Options';
+  }
+  else {
+    this.parentNode.parentNode.getElementsByClassName('select-selected')[0].childNodes[0].innerHTML = checked;
+  }
 }
 
 function optionClickHandler(e) {
@@ -52,8 +88,6 @@ const applyMultiSelect = (elmnt) => {
   const dropdownElmnt =
     elmnt.parentNode.getElementsByClassName("selected-items")[0].childNodes;
 
-
-  console.log(dropdownElmnt[0])
   const filterElmnt = dropdownElmnt[0];
 
   const childDiv = document.createElement('div');
