@@ -6,15 +6,13 @@ const renderSelect = () => {
 };
 
 function multiOptionClickHandler(e) {
-  
-  const selectTag =  this.parentNode.parentNode.getElementsByTagName('select');
-
   this.childNodes[1].checked = !this.childNodes[1].checked;
-
-  const inputElmnts = this.parentNode.getElementsByTagName('input');
+  
   let checked = [];
   let unChecked = [];
 
+  const inputElmnts = this.parentNode.getElementsByTagName('input');
+  
   for (let i = 0; i < inputElmnts.length; i++) {
     if (inputElmnts[i].type === 'checkbox')  {
       if (inputElmnts[i].checked) {
@@ -24,19 +22,19 @@ function multiOptionClickHandler(e) {
       }
     }
   }
-  let node = this.parentNode.parentNode.getElementsByClassName('select-selected')[0].innerHTML = checked;
-  console.log(checked, unChecked, node, selectTag)
-
+  
+  this.parentNode.parentNode.getElementsByClassName('select-selected')[0].childNodes[0].innerHTML = checked;
 }
 
 function optionClickHandler(e) {
   let y, i, k, s, h, sl, yl;
   s = this.parentNode.parentNode.getElementsByTagName("select")[0];
   h = this.parentNode.previousSibling;
+
   for (i = 0; i < s.length; i++) {
-    if (s.options[i].innerHTML == this.innerHTML) {
+    if (s.options[i].innerHTML === this.childNodes[0].innerHTML) {
       s.selectedIndex = i;
-      h.innerHTML = this.innerHTML;
+      h.innerHTML = this.childNodes[0].innerHTML;
       y = this.parentNode.getElementsByClassName("same-as-selected");
       for (k = 0; k < y.length; k++) {
         y[k].classList.add("options");
@@ -47,13 +45,49 @@ function optionClickHandler(e) {
     }
   }
   h.click();
-  console.log("this works");
 }
 
 const applyMultiSelect = (elmnt) => {
   elmnt = document.getElementById("modelYear");
   const dropdownElmnt =
     elmnt.parentNode.getElementsByClassName("selected-items")[0].childNodes;
+
+
+  console.log(dropdownElmnt[0])
+  const filterElmnt = dropdownElmnt[0];
+
+  const childDiv = document.createElement('div');
+  const checkDiv = document.createElement('div');
+  const uncheckDiv = document.createElement('div');
+
+  checkDiv.setAttribute('class', 'multi-check');
+  uncheckDiv.setAttribute('class', 'multi-check');
+
+  const checkIconElmnt = document.createElement('span');
+  checkIconElmnt.setAttribute('class', 'ui-icon ui-icon-check');
+
+  const uncheckIconElmnt = document.createElement('span');
+  uncheckIconElmnt.setAttribute('class', 'ui-icon ui-icon-closethick');
+
+  const checkAllElmnt =  document.createElement('span');
+  checkAllElmnt.innerHTML = 'Check All';
+
+  const uncheckAll = document.createElement('span');
+  uncheckAll.innerHTML = 'Uncheck All'
+
+  filterElmnt.appendChild(childDiv);
+  childDiv.appendChild(checkDiv);
+  childDiv.appendChild(uncheckDiv);
+
+  checkDiv.appendChild(checkIconElmnt);
+  checkDiv.appendChild(checkAllElmnt);
+  uncheckDiv.appendChild(uncheckIconElmnt);
+  uncheckDiv.appendChild(uncheckAll);
+
+  checkDiv.addEventListener('click', checkClickHandler);
+  uncheckDiv.addEventListener('click', uncheckClickHandler);
+
+
 
   for (let i = 0; i < dropdownElmnt.length; i++) {
     if (
@@ -62,7 +96,8 @@ const applyMultiSelect = (elmnt) => {
     ) {
       const checkBoxElmnt = document.createElement("input");
       checkBoxElmnt.setAttribute("type", "checkbox");
-      checkBoxElmnt.setAttribute("value", dropdownElmnt[i].innerHTML);
+      checkBoxElmnt.setAttribute("class", "multi-checkBox")
+      checkBoxElmnt.setAttribute("value", dropdownElmnt[i].childNodes[0].innerHTML);
 
       dropdownElmnt[i].removeEventListener("click", optionClickHandler);
       dropdownElmnt[i].addEventListener("click", multiOptionClickHandler);
@@ -76,6 +111,14 @@ const applyMultiSelect = (elmnt) => {
       dropdownElmnt[i].appendChild(checkBoxElmnt);
     }
   }
+
+  const displayItem = elmnt.parentNode.getElementsByClassName('select-selected')[0];
+  const spanElmnt = document.createElement('span');
+  spanElmnt.setAttribute('class', 'multi-displayed');
+
+  spanElmnt.innerHTML = displayItem.innerHTML;
+  displayItem.innerHTML = '';
+  displayItem.appendChild(spanElmnt);
 };
 
 const inputChangeHandler = (sourceMenu) => {
@@ -117,6 +160,7 @@ const renderFilter = () => {
     const divElm = document.createElement("div");
     const inpElm = document.createElement("input");
     inpElm.type = "text";
+    inpElm.classList.add('select-filter')
 
     divElm.appendChild(inpElm);
 
@@ -128,7 +172,7 @@ const renderFilter = () => {
 };
 
 const renderMenu = () => {
-  let parentDiv, i, j, selElmnt, a, b, c;
+  let parentDiv, i, j, selElmnt, a, b, c, d;
 
   parentDiv = document.getElementsByClassName("custom-select");
 
@@ -145,12 +189,15 @@ const renderMenu = () => {
 
     for (j = 0; j < selElmnt.length; j++) {
       c = document.createElement("div");
-      c.innerHTML = selElmnt.options[j].innerHTML;
-      c.innerHTML === a.innerHTML
+      d = document.createElement('span');
+      d.setAttribute('class', 'item');
+      d.innerHTML = selElmnt.options[j].innerHTML;
+      d.innerHTML === a.innerHTML
         ? c.classList.add("same-as-selected")
         : c.classList.add("options");
       c.addEventListener("click", optionClickHandler);
       b.appendChild(c);
+      c.appendChild(d);
     }
     parentDiv[i].appendChild(b);
     a.addEventListener("click", function (e) {
@@ -163,7 +210,7 @@ const renderMenu = () => {
   renderFilter();
 };
 
-const closeAllSelect = (elmnt) => {
+function closeAllSelect(elmnt) {
   var x,
     y,
     i,

@@ -10,6 +10,13 @@
   display: none; /*hide original SELECT element: */
 }
 
+.custom-select .multi-displayed {
+  white-space: normal; /* Allow line breaks and wrap text */
+  overflow: hidden; /* Clip the content that overflows */
+  display: block; /* Ensure the span behaves like a block element */
+  word-wrap: break-word; /* Allow long words to wrap */
+}
+
 .selected-items {
     position: absolute;
     overflow-y: scroll;
@@ -101,4 +108,25 @@
   display: flex;
   align-items: center;
   flex-direction: row-reverse;
+}
+
+.multi-checkBox {
+  width: auto;
+  padding: 10px;
+}
+
+.multi-check {
+  font-size: 0.75rem;
+  display: flex;
+  padding: 2px;
+}
+
+.multi-check:hover {
+  color: rgb(142, 136, 136);
+  cursor: pointer;
+}
+
+.item {
+  width: 100%;
+  margin: 0px 5px 0px 5px;
 }
