@@ -234,6 +234,7 @@ const renderMenu = () => {
     a = document.createElement("div");
     a.setAttribute("class", "select-selected");
     a.innerHTML = selElmnt.selectedIndex !== -1 ? selElmnt.options[selElmnt.selectedIndex].innerHTML : 'Select an option'; 
+    
     parentDiv[i].appendChild(a);
 
     b = document.createElement("div");
